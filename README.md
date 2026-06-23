@@ -3,6 +3,8 @@
 > Plantilla de referencia para integrar el editor WYSIWYG **Quill 2** en cualquier proyecto web.  
 > Vanilla HTML · CSS · JavaScript — sin framework ni bundler.
 
+**[Ver demo →](http://docs.homium.tech/quill)**
+
 ---
 
 ## Tabla de contenidos
@@ -13,7 +15,6 @@
 4. [Cómo activar o desactivar componentes](#4-cómo-activar-o-desactivar-componentes)
 5. [Cómo editar estilos](#5-cómo-editar-estilos)
 6. [Cómo inicializar múltiples editores](#6-cómo-inicializar-múltiples-editores)
-7. [Subir a GitHub](#7-subir-a-github)
 
 ---
 
@@ -21,44 +22,44 @@
 
 ### Requisitos
 
-- Node.js 18+ (solo para instalar dependencias vía npm)
+- Node.js 18+
 - Navegador moderno (Chrome, Firefox, Safari, Edge)
 
 ### Pasos
 
 ```bash
 # 1. Clona el repositorio
-git clone https://github.com/TU_USUARIO/quill-explorer.git
-cd quill-explorer
+git clone https://github.com/homium-tech/quill.git
+cd quill
 
 # 2. Instala las dependencias
 npm install
 
-# 3. Abre directamente en el navegador
+# 3. Abre en el navegador
 open index.html
 
-# — o sirve con un servidor local (recomendado para evitar restricciones CORS) —
+# — o con servidor local (recomendado) —
 npx serve .
-# Luego abre http://localhost:3000
+# http://localhost:3000
 ```
 
-> **Nota:** No hay build step. Las dependencias (`quill`, `katex`) se sirven directamente desde `node_modules/`.  
-> `highlight.js` se carga desde CDN — requiere conexión a internet.
+> Las dependencias (`quill`, `katex`) se sirven desde `node_modules/` — no hay build step.  
+> `highlight.js` se carga desde CDN, requiere conexión a internet.
 
 ---
 
 ## 2. Estructura del proyecto
 
 ```
-quill-explorer/
-├── index.html          ← Página principal: layout + imports
-├── style.css           ← Todos los estilos (Design System HOMIUM)
-├── main.js             ← Lógica del editor, toggles y configuración
+quill/
+├── index.html        ← layout + imports de librerías
+├── style.css         ← estilos (Design System HOMIUM)
+├── main.js           ← configuración del editor y lógica de toggles
 ├── assets/
-│   └── logo/           ← Logos SVG de HOMIUM
+│   └── logo/         ← logos SVG de HOMIUM
 ├── node_modules/
-│   ├── quill/dist/     ← quill.js (UMD) + quill.snow.css
-│   └── katex/dist/     ← katex.min.js + katex.min.css + fonts/
+│   ├── quill/dist/   ← quill.js (UMD) + quill.snow.css
+│   └── katex/dist/   ← katex.min.js + katex.min.css + fonts/
 └── package.json
 ```
 
@@ -68,52 +69,51 @@ quill-explorer/
 
 ### Grupos de toolbar
 
-Cada grupo es un bloque de botones en la barra de herramientas. Se definen en `main.js` dentro de `TOOLBAR_GROUPS`.
+Cada grupo es un bloque de botones en la barra de herramientas. Se definen en `TOOLBAR_GROUPS` dentro de `main.js`.
 
-| Clave         | Botones que incluye                          |
-|---------------|----------------------------------------------|
-| `formatting`  | Negrita, cursiva, subrayado, tachado         |
-| `headers`     | H1, H2, H3, normal                           |
-| `script`      | Superíndice, subíndice                       |
-| `fontFamily`  | Selector de tipografía                       |
-| `fontSize`    | Pequeño, normal, grande, enorme              |
-| `colors`      | Color de texto, color de fondo               |
-| `lists`       | Lista ordenada, lista con viñetas, indentado |
-| `align`       | Alineación (izquierda, centro, derecha, just.) |
-| `links`       | Link, imagen, video                          |
-| `codeQuote`   | Cita, bloque de código                       |
-| `formula`     | Fórmula matemática (requiere KaTeX)          |
-| `clean`       | Limpiar formato                              |
+| Clave        | Botones que incluye                            |
+|--------------|------------------------------------------------|
+| `formatting` | Negrita, cursiva, subrayado, tachado           |
+| `headers`    | H1, H2, H3, normal                             |
+| `script`     | Superíndice, subíndice                         |
+| `fontFamily` | Selector de tipografía                         |
+| `fontSize`   | Pequeño, normal, grande, enorme                |
+| `colors`     | Color de texto, color de fondo                 |
+| `lists`      | Lista ordenada, viñetas, indentado             |
+| `align`      | Alineación (izquierda, centro, derecha, just.) |
+| `links`      | Link, imagen, video                            |
+| `codeQuote`  | Cita, bloque de código                         |
+| `formula`    | Fórmula matemática (requiere KaTeX)            |
+| `clean`      | Limpiar formato                                |
 
 ### Módulos
 
-Los módulos son funcionalidades adicionales que Quill carga junto con el editor.
+Los módulos son funcionalidades que Quill carga al inicializarse.
 
-| Clave     | Función                                                    |
-|-----------|------------------------------------------------------------|
-| `history` | Habilita deshacer/rehacer (`Ctrl+Z` / `Ctrl+Y`)           |
+| Clave     | Función                                                       |
+|-----------|---------------------------------------------------------------|
+| `history` | Deshacer/rehacer con `Ctrl+Z` / `Ctrl+Y`                     |
 | `syntax`  | Resaltado de sintaxis en bloques de código (usa highlight.js) |
-| `table`   | Inserción y edición de tablas (nativo de Quill 2)          |
+| `table`   | Inserción y edición de tablas (nativo de Quill 2)             |
 
 ---
 
 ## 4. Cómo activar o desactivar componentes
 
-### Desde la interfaz (en tiempo real)
+### Desde la interfaz
 
 Usa los toggles del panel izquierdo. El editor se reinicializa automáticamente conservando el contenido.
 
 ### Desde el código — estado inicial
 
-En `main.js`, edita el objeto `state` para cambiar qué está activo al cargar:
+En `main.js`, edita el objeto `state` para controlar qué está activo al cargar:
 
 ```js
-// main.js
 const state = {
   groups: {
-    formatting: true,   // ← true = activo, false = desactivado
+    formatting: true,   // true = visible en toolbar
     headers:    true,
-    script:     false,  // oculto del toolbar
+    script:     false,  // false = oculto
     fontFamily: false,
     fontSize:   false,
     colors:     true,
@@ -121,12 +121,12 @@ const state = {
     align:      true,
     links:      true,
     codeQuote:  true,
-    formula:    false,  // requiere window.katex
+    formula:    false,
     clean:      true,
   },
   modules: {
     history: true,
-    syntax:  false,     // requiere window.hljs
+    syntax:  false,
     table:   false,
   },
 };
@@ -134,114 +134,109 @@ const state = {
 
 ### Agregar un grupo nuevo
 
-1. Agrégalo a `TOOLBAR_GROUPS` en `main.js`:
+1. Define el grupo en `TOOLBAR_GROUPS`:
 
 ```js
 const TOOLBAR_GROUPS = {
   // ... grupos existentes ...
 
-  // Nuevo grupo — botones inline directos
-  divider: {
-    label: 'Línea divisoria',
-    items: ['divider'],          // nombre del blot personalizado
+  extra: {
+    label: 'Extras',
+    items: [{ script: 'sub' }, { script: 'super' }, 'strike'],
   },
 };
 ```
 
-2. Agrégalo al estado inicial en `state.groups`:
+2. Agrégalo al estado:
 
 ```js
 const state = {
   groups: {
     // ... grupos existentes ...
-    divider: false,   // desactivado por defecto
+    extra: false,  // desactivado por defecto
   },
 };
 ```
 
-3. Agrega el toggle en la interfaz — se genera automáticamente al ejecutar `renderGroupToggles()`.
+El toggle aparece automáticamente en el panel — no necesitas tocar el HTML.
 
 ### Eliminar un grupo permanentemente
 
-Simplemente borra su entrada de `TOOLBAR_GROUPS` y de `state.groups`. No necesitas tocar el HTML ni otros archivos.
+Borra su entrada de `TOOLBAR_GROUPS` y de `state.groups`. No hay más archivos que editar.
 
 ---
 
 ## 5. Cómo editar estilos
 
-Todos los estilos están en `style.css`. La primera sección define los tokens del Design System HOMIUM:
+Todos los estilos están en `style.css`. Los colores se controlan con tokens CSS al inicio del archivo:
 
 ```css
 :root {
-  --homium-purple: #290640;  /* color de fondo principal */
-  --homium-cyan:   #00ffff;  /* acentos, CTAs, toggles activos */
-  --homium-green:  #5aeaa2;  /* acentos secundarios */
+  --homium-purple: #290640;  /* fondo principal del panel y header */
+  --homium-cyan:   #00ffff;  /* acentos, toggles activos, bordes */
+  --homium-green:  #5aeaa2;  /* acentos secundarios                */
 }
 ```
 
-### Cambiar colores del editor
+### Colores del área de edición
 
-El área de edición usa tema claro (fondo blanco). Para cambiarlo edita esta sección:
+El editor usa fondo blanco. Para cambiarlo:
 
 ```css
-/* style.css — área del editor */
 .editor-area {
-  background: #ffffff;        /* ← fondo del área */
+  background: #ffffff;        /* fondo del área */
 }
 
 #editor-wrapper .ql-editor {
-  color: var(--purple-700);   /* ← color del texto */
+  color: var(--purple-700);   /* color del texto */
 }
 
 #editor-wrapper .ql-toolbar.ql-snow {
-  background: #faf7fc;        /* ← fondo de la toolbar */
+  background: #faf7fc;        /* fondo de la toolbar */
 }
 ```
 
-### Cambiar la tipografía
+### Tipografía
 
 El proyecto usa **Rubik** (Google Fonts). Para cambiarla:
 
 ```css
-/* style.css — al inicio */
-@import url('https://fonts.googleapis.com/css2?family=TU_FUENTE&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
 
 :root {
-  --font-sans: 'Tu Fuente', system-ui, sans-serif;
+  --font-sans: 'Inter', system-ui, sans-serif;
 }
 ```
 
-### Cambiar el ancho máximo del editor
+### Ancho del editor
 
 ```css
 #editor-wrapper .ql-editor {
-  max-width: 740px;   /* ← ajusta a tu gusto, o usa 100% para ancho completo */
+  max-width: 740px;  /* usa 100% para ancho completo */
 }
 ```
 
-### Cambiar el tema de highlight.js
+### Tema de sintaxis (highlight.js)
 
-Reemplaza el `<link>` de CDN en `index.html`:
+Cambia el `<link>` en `index.html`:
 
 ```html
-<!-- index.html -->
-<!-- Tema actual: atom-one-dark -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
+<!-- Tema actual -->
+<link rel="stylesheet" href=".../styles/atom-one-dark.min.css">
 
-<!-- Otros disponibles: github-dark, monokai, dracula, vs2015 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/github-dark.min.css">
+<!-- Alternativas: github-dark, monokai, dracula, vs2015 -->
+<link rel="stylesheet" href=".../styles/github-dark.min.css">
 ```
 
 ---
 
 ## 6. Cómo inicializar múltiples editores
 
-Quill no tiene limitación de instancias — cada instancia es independiente y se vincula a un contenedor DOM distinto.
+Cada instancia de Quill es independiente — solo necesitan contenedores distintos.
 
 ### HTML
 
 ```html
-<!-- index.html -->
 <div id="editor-titulo"></div>
 <div id="editor-cuerpo"></div>
 <div id="editor-notas"></div>
@@ -250,15 +245,17 @@ Quill no tiene limitación de instancias — cada instancia es independiente y s
 ### JavaScript
 
 ```js
-// Cada instancia recibe su propio selector y configuración
+// Toolbar mínimo — solo formato básico
 const editorTitulo = new Quill('#editor-titulo', {
   theme: 'snow',
   modules: {
-    toolbar: [['bold', 'italic']],   // toolbar mínimo
+    toolbar: [['bold', 'italic']],
   },
   placeholder: 'Escribe el título...',
 });
 
+// Toolbar completo con syntax highlighting
+// Requiere highlight.js cargado antes de este script
 const editorCuerpo = new Quill('#editor-cuerpo', {
   theme: 'snow',
   modules: {
@@ -269,101 +266,47 @@ const editorCuerpo = new Quill('#editor-cuerpo', {
       ['blockquote', 'code-block'],
     ],
     history: { delay: 1000, maxStack: 100 },
-    syntax: { hljs: window.hljs },   // requiere highlight.js cargado
+    syntax: { hljs: window.hljs },
   },
   placeholder: 'Escribe el contenido...',
 });
 
+// Sin toolbar — el usuario escribe texto sin opciones de formato
 const editorNotas = new Quill('#editor-notas', {
   theme: 'snow',
-  modules: {
-    toolbar: false,   // sin toolbar — solo texto plano
-  },
+  modules: { toolbar: false },
   placeholder: 'Notas internas...',
 });
 ```
 
-### Leer el contenido de cada instancia
+### Leer el contenido
 
 ```js
-// Delta (formato interno de Quill)
-const deltaCuerpo = editorCuerpo.getContents();
-
-// HTML semántico
-const htmlCuerpo = editorCuerpo.getSemanticHTML();
-
-// Texto plano
-const textoCuerpo = editorCuerpo.getText();
+const delta = editorCuerpo.getContents();      // Delta (formato interno)
+const html  = editorCuerpo.getSemanticHTML();  // HTML semántico
+const texto = editorCuerpo.getText();          // Texto plano
 ```
 
-### Escuchar cambios en tiempo real
+### Detectar cambios
 
 ```js
 editorCuerpo.on('text-change', (delta, oldDelta, source) => {
   if (source === 'user') {
-    console.log('El usuario editó:', editorCuerpo.getSemanticHTML());
+    console.log(editorCuerpo.getSemanticHTML());
   }
 });
 ```
 
 ---
 
-## 7. Subir a GitHub
-
-### Primera vez
-
-```bash
-# 1. Inicializa git en el proyecto
-git init
-
-# 2. Crea el .gitignore para no subir node_modules
-echo "node_modules/" > .gitignore
-
-# 3. Agrega todos los archivos
-git add .
-
-# 4. Primer commit
-git commit -m "feat: Quill 2 Explorer — plantilla WYSIWYG"
-
-# 5. Crea el repositorio en GitHub (requiere GitHub CLI instalado)
-gh repo create quill-explorer --public --source=. --remote=origin --push
-
-# — o si prefieres hacerlo manual —
-# Crea el repo en https://github.com/new, luego:
-git remote add origin https://github.com/TU_USUARIO/quill-explorer.git
-git branch -M main
-git push -u origin main
-```
-
-### Actualizaciones posteriores
-
-```bash
-git add .
-git commit -m "descripción del cambio"
-git push
-```
-
-### ¿Qué NO subir?
-
-El archivo `.gitignore` ya excluye `node_modules/`. Los usuarios que clonan el repo solo necesitan ejecutar `npm install` para restaurar las dependencias.
-
-```
-# .gitignore
-node_modules/
-.DS_Store
-```
-
----
-
 ## Dependencias
 
-| Paquete        | Versión  | Uso                              | Carga          |
-|----------------|----------|----------------------------------|----------------|
-| `quill`        | ^2.0.3   | Editor WYSIWYG principal         | node_modules   |
-| `katex`        | latest   | Renderizado de fórmulas matemáticas | node_modules |
-| `highlight.js` | 11.10.0  | Resaltado de sintaxis en código  | CDN            |
+| Paquete        | Versión | Uso                                  | Carga        |
+|----------------|---------|--------------------------------------|--------------|
+| `quill`        | 2.0.3   | Editor WYSIWYG                       | node_modules |
+| `katex`        | 0.17.0  | Renderizado de fórmulas matemáticas  | node_modules |
+| `highlight.js` | 11.10.0 | Resaltado de sintaxis en código      | CDN          |
 
 ---
 
-> Construido con el **HOMIUM Design System.**  
-> *Tecnología sin complicaciones.*
+> Construido con el **HOMIUM Design System** · *Tecnología sin complicaciones.*
