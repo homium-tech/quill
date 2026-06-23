@@ -1,0 +1,496 @@
+/* =============================================================
+   Quill 2 Explorer — Homium Design System
+   "Tecnología sin complicaciones."
+   ============================================================= */
+
+/* Rubik variable font — Google Fonts CDN */
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+/* ----- Homium tokens (subset) ----- */
+:root {
+  --homium-purple:   #290640;
+  --homium-cyan:     #00ffff;
+  --homium-green:    #5aeaa2;
+
+  --purple-950: #150220;
+  --purple-900: #1d042d;
+  --purple-800: #240537;
+  --purple-700: #290640;
+  --purple-600: #380a55;
+  --purple-500: #4a1170;
+  --purple-400: #6a2a9c;
+  --purple-300: #8e57bf;
+
+  --cyan-700:  #00b8b8;
+  --cyan-500:  #00ffff;
+  --cyan-300:  #9bffff;
+  --green-500: #5aeaa2;
+  --green-700: #2bb077;
+
+  --bg:            var(--homium-purple);
+  --bg-elevated:   var(--purple-600);
+  --bg-sunken:     var(--purple-900);
+  --fg:            #ffffff;
+  --fg-muted:      rgba(255,255,255,0.72);
+  --fg-subtle:     rgba(255,255,255,0.45);
+  --accent:        var(--homium-cyan);
+  --accent-2:      var(--homium-green);
+  --border:        rgba(255,255,255,0.10);
+  --border-cyan:   var(--homium-cyan);
+
+  --glow-cyan:   0 0 24px rgba(0,255,255,0.45);
+  --glow-purple: 0 40px 120px -20px rgba(90,40,180,0.55);
+
+  --radius-sm:   8px;
+  --radius-md:   14px;
+  --radius-pill: 999px;
+
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  24px;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur-med:  260ms;
+
+  --font-sans: 'Rubik', system-ui, -apple-system, sans-serif;
+  --font-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, monospace;
+  --ls-caps:    0.12em;
+  --ls-eyebrow: 0.04em;
+}
+
+/* =============================================================
+   Reset
+   ============================================================= */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--fg);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+::selection { background: var(--homium-cyan); color: var(--homium-purple); }
+
+/* =============================================================
+   Header
+   ============================================================= */
+header {
+  background: var(--purple-900);
+  border-bottom: 1px solid rgba(0,255,255,0.18);
+  padding: 0 var(--sp-5);
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  position: relative;
+  /* soft glow behind the header */
+  box-shadow: 0 1px 0 rgba(0,255,255,0.08), 0 4px 24px rgba(0,0,0,0.4);
+}
+
+header::before {
+  /* brand left rail accent */
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--homium-cyan);
+}
+
+.header-logo {
+  height: 22px;
+  width: auto;
+  display: block;
+  flex-shrink: 0;
+}
+
+.header-sep {
+  color: rgba(0,255,255,0.35);
+  font-size: 16px;
+  font-weight: 300;
+  flex-shrink: 0;
+}
+
+.header-bracket {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: var(--ls-eyebrow);
+  color: var(--homium-green);
+  opacity: 0.9;
+}
+
+.header-bracket::before { content: '[ '; }
+.header-bracket::after  { content: ' ]'; }
+
+.header-desc {
+  font-size: 12px;
+  color: var(--fg-subtle);
+  margin-left: auto;
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* =============================================================
+   Workspace layout
+   ============================================================= */
+.workspace {
+  display: flex;
+  height: calc(100vh - 52px);
+}
+
+/* =============================================================
+   Toggle Panel (sidebar)
+   ============================================================= */
+.panel {
+  width: 260px;
+  min-width: 260px;
+  background: var(--purple-900);
+  border-right: 1px solid rgba(0,255,255,0.10);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.panel-section {
+  padding: var(--sp-5) var(--sp-4) var(--sp-4);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+/* section heading — Homium bracket eyebrow pattern */
+.panel-section h2 {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: var(--ls-caps);
+  text-transform: uppercase;
+  color: var(--homium-cyan);
+  margin-bottom: var(--sp-3);
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.panel-section h2::before,
+.panel-section h2::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(0,255,255,0.15);
+}
+
+/* =============================================================
+   Toggle row
+   ============================================================= */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: 7px 2px;
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  user-select: none;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+
+.toggle-row:hover {
+  background: rgba(255,255,255,0.04);
+}
+
+.toggle-row:hover .toggle-label {
+  color: var(--fg);
+}
+
+.toggle-row--disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.toggle-label {
+  color: var(--fg-muted);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.3;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1;
+  transition: color var(--dur-fast);
+}
+
+.toggle-desc {
+  font-size: 10px;
+  color: var(--fg-subtle);
+  font-weight: 300;
+  font-style: italic;
+}
+
+/* Toggle switch */
+.toggle-switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.toggle-knob {
+  position: absolute;
+  inset: 0;
+  background: var(--purple-700);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: var(--radius-pill);
+  transition: background var(--dur-med) var(--ease-out),
+              border-color var(--dur-med) var(--ease-out);
+}
+
+.toggle-knob::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 50%;
+  transition: transform var(--dur-med) var(--ease-out),
+              background var(--dur-med) var(--ease-out);
+}
+
+.toggle-switch input:checked + .toggle-knob {
+  background: rgba(0,255,255,0.15);
+  border-color: var(--homium-cyan);
+}
+
+.toggle-switch input:checked + .toggle-knob::after {
+  transform: translateX(16px);
+  background: var(--homium-cyan);
+  box-shadow: var(--glow-cyan);
+}
+
+/* =============================================================
+   Editor area
+   ============================================================= */
+.editor-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+#editor-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Quill toolbar override */
+#editor-wrapper .ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: 1px solid rgba(41,6,64,0.12);
+  background: #faf7fc;
+  padding: 10px 16px;
+  flex-shrink: 0;
+  font-family: var(--font-sans);
+}
+
+#editor-wrapper .ql-toolbar.ql-snow .ql-formats {
+  margin-right: 12px;
+}
+
+/* Toolbar button hover — cyan accent */
+#editor-wrapper .ql-snow .ql-toolbar button:hover,
+#editor-wrapper .ql-snow .ql-toolbar button.ql-active,
+#editor-wrapper .ql-snow .ql-toolbar .ql-picker-label:hover,
+#editor-wrapper .ql-snow .ql-toolbar .ql-picker-label.ql-active,
+#editor-wrapper .ql-snow .ql-toolbar .ql-picker-item:hover,
+#editor-wrapper .ql-snow .ql-toolbar .ql-picker-item.ql-selected {
+  color: var(--purple-500);
+}
+
+#editor-wrapper .ql-snow .ql-toolbar button:hover .ql-stroke,
+#editor-wrapper .ql-snow .ql-toolbar button.ql-active .ql-stroke {
+  stroke: var(--purple-500);
+}
+
+#editor-wrapper .ql-snow .ql-toolbar button:hover .ql-fill,
+#editor-wrapper .ql-snow .ql-toolbar button.ql-active .ql-fill {
+  fill: var(--purple-500);
+}
+
+/* Quill editor container */
+#editor-wrapper .ql-container.ql-snow {
+  border: none;
+  flex: 1;
+  overflow-y: auto;
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--purple-700);
+}
+
+#editor-wrapper .ql-editor {
+  max-width: 740px;
+  margin: 0 auto;
+  padding: 36px 32px;
+  min-height: 100%;
+  color: var(--purple-700);
+}
+
+#editor-wrapper .ql-editor.ql-blank::before {
+  color: rgba(74,17,112,0.30);
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* Headings — purple, Rubik */
+#editor-wrapper .ql-editor h1,
+#editor-wrapper .ql-editor h2,
+#editor-wrapper .ql-editor h3 {
+  font-family: var(--font-sans);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  color: var(--homium-purple);
+}
+
+/* Blockquote — cyan left border */
+#editor-wrapper .ql-editor blockquote {
+  border-left: 3px solid var(--homium-cyan);
+  color: var(--purple-400);
+  padding-left: 16px;
+  font-style: italic;
+  font-weight: 300;
+}
+
+/* Code block — dark purple surface */
+#editor-wrapper .ql-editor pre.ql-syntax {
+  background: var(--purple-900);
+  color: var(--cyan-300);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  border: 1px solid rgba(0,255,255,0.15);
+}
+
+/* Inline code */
+#editor-wrapper .ql-editor code {
+  background: rgba(41,6,64,0.08);
+  color: var(--purple-500);
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Links */
+#editor-wrapper .ql-editor a {
+  color: var(--purple-500);
+  text-decoration: underline;
+  text-decoration-color: rgba(74,17,112,0.3);
+}
+
+/* =============================================================
+   Export bar
+   ============================================================= */
+.export-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: 8px 16px;
+  background: #faf7fc;
+  border-top: 1px solid rgba(41,6,64,0.10);
+  flex-shrink: 0;
+}
+
+.export-bar button {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 14px;
+  background: var(--homium-purple);
+  color: var(--homium-cyan);
+  border: 1px solid rgba(0,255,255,0.25);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  letter-spacing: 0.02em;
+  transition: background var(--dur-fast), box-shadow var(--dur-fast);
+}
+
+.export-bar button:hover {
+  background: var(--purple-600);
+  box-shadow: var(--glow-cyan);
+}
+
+/* Export panel */
+#export-panel {
+  display: none;
+  padding: 12px 16px;
+  background: var(--purple-900);
+  border-top: 1px solid rgba(0,255,255,0.10);
+  max-height: 200px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.export-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-3);
+}
+
+.export-col h3 {
+  font-size: 9px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-caps);
+  color: var(--homium-green);
+  margin-bottom: 6px;
+}
+
+.export-col pre {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: var(--purple-950);
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(0,255,255,0.08);
+  max-height: 130px;
+  overflow-y: auto;
+}
+
+/* =============================================================
+   Scrollbar
+   ============================================================= */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.20); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,255,255,0.40); }
+
+/* Quill picker label overrides */
+.ql-snow .ql-picker.ql-header .ql-picker-label::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item::before { content: 'Normal'; }
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='1']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='1']::before { content: 'H1'; }
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='2']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='2']::before { content: 'H2'; }
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value='3']::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value='3']::before { content: 'H3'; }

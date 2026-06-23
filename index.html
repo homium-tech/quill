@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quill 2 — Explorador de componentes</title>
+
+  <!-- Quill Snow theme -->
+  <link rel="stylesheet" href="./node_modules/quill/dist/quill.snow.css">
+
+  <!-- KaTeX (math formulas) -->
+  <link rel="stylesheet" href="./node_modules/katex/dist/katex.min.css">
+
+  <!-- highlight.js theme (CDN — no browser bundle in npm package) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/styles/atom-one-dark.min.css">
+
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+<header>
+  <img src="./assets/logo/homium-wordmark-white.svg" alt="HOMIUM" class="header-logo">
+  <span class="header-sep">›</span>
+  <span class="header-bracket">Quill 2 Explorer</span>
+  <span class="header-desc">Activa o desactiva componentes desde el panel izquierdo.</span>
+</header>
+
+<div class="workspace">
+
+  <!-- ── Toggle panel ──────────────────────────────────────── -->
+  <aside id="toggle-panel" class="panel">
+
+    <div class="panel-section">
+      <h2>Grupos de Toolbar</h2>
+      <div id="group-toggles"></div>
+    </div>
+
+    <div class="panel-section">
+      <h2>Módulos</h2>
+      <div id="module-toggles"></div>
+    </div>
+
+  </aside>
+
+  <!-- ── Editor area ───────────────────────────────────────── -->
+  <main class="editor-area">
+
+    <div id="editor-wrapper">
+      <div id="editor"></div>
+    </div>
+
+    <div class="export-bar">
+      <button id="btn-show-delta">Ver Delta / HTML</button>
+    </div>
+
+    <div id="export-panel">
+      <div class="export-cols">
+        <div class="export-col">
+          <h3>Delta (JSON)</h3>
+          <pre id="out-delta"></pre>
+        </div>
+        <div class="export-col">
+          <h3>Semantic HTML</h3>
+          <pre id="out-html"></pre>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Quill 2 UMD — sets window.Quill -->
+<script src="./node_modules/quill/dist/quill.js"></script>
+
+<!-- KaTeX UMD — sets window.katex (required for formula format) -->
+<script src="./node_modules/katex/dist/katex.min.js"></script>
+
+<!-- highlight.js (CDN, sets window.hljs) — required for syntax module -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+
+<script src="./main.js"></script>
+</body>
+</html>
