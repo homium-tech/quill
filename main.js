@@ -259,10 +259,37 @@ function initExportPanel() {
 // ---------------------------------------------------------------------------
 // Bootstrap
 // ---------------------------------------------------------------------------
+function initPanelDrawer() {
+  const btn     = document.getElementById('btn-panel-toggle');
+  const panel   = document.getElementById('toggle-panel');
+  const overlay = document.getElementById('panel-overlay');
+
+  function openPanel() {
+    panel.classList.add('is-open');
+    overlay.classList.add('is-visible');
+    btn.classList.add('is-open');
+    btn.setAttribute('aria-label', 'Cerrar panel');
+  }
+
+  function closePanel() {
+    panel.classList.remove('is-open');
+    overlay.classList.remove('is-visible');
+    btn.classList.remove('is-open');
+    btn.setAttribute('aria-label', 'Abrir panel de configuración');
+  }
+
+  btn.addEventListener('click', () => {
+    panel.classList.contains('is-open') ? closePanel() : openPanel();
+  });
+
+  overlay.addEventListener('click', closePanel);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   renderPanel();
   initQuill();
   initExportPanel();
+  initPanelDrawer();
 
   document.getElementById('toggle-panel').addEventListener('change', onToggleChange);
 });

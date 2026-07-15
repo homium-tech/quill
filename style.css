@@ -485,6 +485,125 @@ header::before {
 ::-webkit-scrollbar-thumb { background: rgba(0,255,255,0.20); border-radius: 2px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0,255,255,0.40); }
 
+/* =============================================================
+   Panel toggle button (visible solo en mobile)
+   ============================================================= */
+.panel-toggle-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 6px;
+  background: transparent;
+  border: 1px solid rgba(0,255,255,0.18);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background var(--dur-fast), border-color var(--dur-fast);
+}
+
+.panel-toggle-btn span {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  background: var(--homium-cyan);
+  border-radius: 2px;
+  transition: transform var(--dur-med) var(--ease-out),
+              opacity var(--dur-med) var(--ease-out);
+}
+
+.panel-toggle-btn:hover {
+  background: rgba(0,255,255,0.08);
+  border-color: var(--homium-cyan);
+}
+
+/* Estado abierto — convierte en X */
+.panel-toggle-btn.is-open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.panel-toggle-btn.is-open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.panel-toggle-btn.is-open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* Overlay para cerrar el panel tocando fuera */
+.panel-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 9;
+  backdrop-filter: blur(2px);
+}
+
+.panel-overlay.is-visible { display: block; }
+
+/* =============================================================
+   Responsive
+   ============================================================= */
+
+/* ── Tablet (≤ 900px): panel más estrecho ── */
+@media (max-width: 900px) {
+  .panel {
+    width: 220px;
+    min-width: 220px;
+  }
+
+  .header-desc { display: none; }
+
+  #editor-wrapper .ql-editor {
+    padding: 24px 20px;
+  }
+}
+
+/* ── Mobile (≤ 640px): panel como drawer ── */
+@media (max-width: 640px) {
+  .panel-toggle-btn { display: flex; }
+
+  .panel {
+    position: fixed;
+    top: 52px;
+    left: 0;
+    bottom: 0;
+    width: 280px;
+    min-width: unset;
+    z-index: 10;
+    transform: translateX(-100%);
+    transition: transform var(--dur-med) var(--ease-out);
+    box-shadow: 4px 0 32px rgba(0,0,0,0.5);
+  }
+
+  .panel.is-open {
+    transform: translateX(0);
+  }
+
+  .workspace {
+    height: calc(100vh - 52px);
+  }
+
+  #editor-wrapper .ql-editor {
+    padding: 20px 16px;
+    max-width: 100%;
+  }
+
+  #editor-wrapper .ql-toolbar.ql-snow {
+    padding: 8px 12px;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .export-cols {
+    grid-template-columns: 1fr;
+  }
+
+  .header-sep { display: none; }
+  .header-bracket { display: none; }
+}
+
+/* ── Mobile pequeño (≤ 380px) ── */
+@media (max-width: 380px) {
+  header { padding: 0 12px; gap: 10px; }
+  .header-logo { height: 18px; }
+}
+
 /* Quill picker label overrides */
 .ql-snow .ql-picker.ql-header .ql-picker-label::before,
 .ql-snow .ql-picker.ql-header .ql-picker-item::before { content: 'Normal'; }
